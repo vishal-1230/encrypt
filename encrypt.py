@@ -34,15 +34,18 @@ public_key = RSA.import_key(public_key_pem)
 #     public_key = RSA.import_key(base64.b64decode(public_key_pem))
 
 
+
 # Convert the message string to bytes
-message = "819939532213"
-message_bytes = message.encode("utf-8")
+def encrypt(param):
+    message = param
+    message_bytes = message.encode("utf-8")
 
 # Encrypt the message using RSA with ECB mode and PKCS1 padding
-cipher = PKCS1_v1_5.new(public_key)
-encrypted_bytes = cipher.encrypt(message_bytes)
+    cipher = PKCS1_v1_5.new(public_key)
+    encrypted_bytes = cipher.encrypt(message_bytes)
 
 # Convert the encrypted bytes to a Base64-encoded string for storage or transmission
-encrypted_text = base64.b64encode(encrypted_bytes).decode("utf-8")
-print(encrypted_text) 
+    encrypted_text = base64.b64encode(encrypted_bytes).decode("utf-8")
+    print(encrypted_text)
+    return encrypted_text
 
