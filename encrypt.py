@@ -2,6 +2,26 @@
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
 import base64
+from fastapi import FastAPI, File, UploadFile
+from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+
+app = FastAPI()
+# I used cors to allow all origins, as I was testing on localhost
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def read_root():
+    print("Hello World")
+    return {"Hello": "World"}
 
 # Convert the public key string to bytes
 # public_key_pem = b"""
@@ -21,7 +41,7 @@ import base64
 # -----END PUBLIC KEY-----
 # """
 
-with open("lib/public.pem", "rb") as f:
+with open("./public.pem", "rb") as f:
     public_key_pem = f.read()
 
 public_key = RSA.import_key(public_key_pem)
@@ -36,6 +56,7 @@ public_key = RSA.import_key(public_key_pem)
 
 
 # Convert the message string to bytes
+@app.post("/encryptForShubhamChutiya")
 def encrypt(param):
     message = param
     message_bytes = message.encode("utf-8")
@@ -47,5 +68,5 @@ def encrypt(param):
 # Convert the encrypted bytes to a Base64-encoded string for storage or transmission
     encrypted_text = base64.b64encode(encrypted_bytes).decode("utf-8")
     print(encrypted_text)
-    return encrypted_text
+    return {"Encrpyted": encrypted_text}
 
